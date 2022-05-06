@@ -10,16 +10,29 @@ app.use(cors());
 app.use(express.json());
 
 
-
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.vh8hi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-    const collection = client.db("test").collection("devices");
-    console.log('Affinity Server Connected');
-    // perform actions on the collection object
-    client.close();
-});
+
+async function run() {
+    try {
+        await client.connect();
+        const collection = client.db("affinity").collection("warhouse");
+
+        app.post('/add', (req, res) => {
+            const newItem = req.body;
+            console.log('adding new item', newItem);
+            res.send({ result: 'success' })
+
+        });
+
+    }
+    finally {
+
+    }
+
+}
+
+run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
