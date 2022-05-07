@@ -18,6 +18,13 @@ async function run() {
         await client.connect();
         const collection = client.db("affinity").collection("warhouse");
 
+        app.get('/add', async (req, res) => {
+            const query = {};
+            const cursor = collection.find(query);
+            const items = await cursor.toArray();
+            res.send(items);
+        })
+
         app.post('/add', async (req, res) => {
             const newItem = req.body;
             console.log('adding new item', newItem);
