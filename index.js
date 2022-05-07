@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 
@@ -18,10 +18,11 @@ async function run() {
         await client.connect();
         const collection = client.db("affinity").collection("warhouse");
 
-        app.post('/add', (req, res) => {
+        app.post('/add', async (req, res) => {
             const newItem = req.body;
             console.log('adding new item', newItem);
-            res.send({ result: 'success' })
+            const result = await collection.insertOne(newItem);
+            res.send(result)
 
         });
 
