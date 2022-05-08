@@ -34,6 +34,14 @@ async function run() {
 
         });
 
+        app.get('/myitems', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = collection.find(query);
+            const myitems = await cursor.toArray();
+            res.send(myitems);
+        })
+
         app.delete('/add/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
