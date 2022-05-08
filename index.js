@@ -34,6 +34,35 @@ async function run() {
 
         });
 
+
+        app.put('/item/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedItem = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    name: updatedItem.name,
+                    email: updatedItem.email,
+                    description: updatedItem.description,
+                    price: updatedItem.price,
+                    quantity: updatedItem.quantity,
+                    suppliername: updatedItem.suppliername,
+                    image: updatedItem.image
+
+                }
+            };
+            const result = await collection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
+
+        app.get('/item/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await collection.findOne(query);
+            res.send(result);
+        })
+
         app.get('/myitems', async (req, res) => {
             const email = req.query.email;
             const query = { email: email };
